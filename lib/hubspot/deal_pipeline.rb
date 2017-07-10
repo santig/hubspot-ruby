@@ -1,4 +1,4 @@
-require 'hubspot/utils'
+require_relative 'utils'
 
 module Hubspot
   #

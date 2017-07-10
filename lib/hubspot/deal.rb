@@ -1,4 +1,4 @@
-require 'hubspot/utils'
+require_relative 'utils'
 
 module Hubspot
   #
@@ -47,7 +47,7 @@ module Hubspot
          object_ids = (company_ids.any? ? company_ids : vids).join('&id=')
          Hubspot::Connection.put_json(ASSOCIATE_DEAL_PATH, params: { deal_id: deal_id, OBJECTTYPE: objecttype, objectId: object_ids}, body: {})
        end
- 
+
 
       def find(deal_id)
         response = Hubspot::Connection.get_json(DEAL_PATH, { deal_id: deal_id })
@@ -62,7 +62,7 @@ module Hubspot
         response = Hubspot::Connection.get_json(RECENT_UPDATED_PATH, opts)
         response['results'].map { |d| new(d) }
       end
-      
+
       # Find all deals associated to a company
       # {http://developers.hubspot.com/docs/methods/deals/get-associated-deals}
       # @param company [Hubspot::Company] the company
