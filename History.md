@@ -1,3 +1,8 @@
+## 0.6.2 (November 29, 2018)
+* [#3] Add `patch!` on engagement.
+
+[#3]: https://github.com/santig/hubspot-ruby/pull/3
+
 ## 0.6.1 (November 29, 2018)
 
 * [#146] Deprecate the use of the hubspot rake tasks. Deprecating these tasks
