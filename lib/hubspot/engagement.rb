@@ -28,8 +28,8 @@ module Hubspot
     end
 
     class << self
-      def create!(params={})
-        response = Hubspot::Connection.post_json(CREATE_ENGAGMEMENT_PATH, params: {}, body: params )
+      def create!(params = {})
+        response = Hubspot::Connection.post_json(CREATE_ENGAGMEMENT_PATH, params: {}, body: params)
         new(HashWithIndifferentAccess.new(response))
       end
 
@@ -70,6 +70,18 @@ module Hubspot
         engagements
       end
 
+      #
+      # Allow to patch an engagement by id, without having to GET the engagement object to
+      # patch it latter, if you already have the engagement id then use it :)
+      #
+      def patch!(id, payload)
+        Hubspot::Connection.patch_json(
+          Hubspot::Engagement::ENGAGEMENT_PATH,
+          params: { engagement_id: id },
+          body: payload
+        )
+      end
+
       # Associates an engagement with an object
       # {https://developers.hubspot.com/docs/methods/engagements/associate_engagement}
       # @param engagement_id [int] id of the engagement to associate
@@ -89,7 +101,7 @@ module Hubspot
     # {http://developers.hubspot.com/docs/methods/engagements/delete-engagement}
     # @return [TrueClass] true
     def destroy!
-      Hubspot::Connection.delete_json(ENGAGEMENT_PATH, {engagement_id: id})
+      Hubspot::Connection.delete_json(ENGAGEMENT_PATH, { engagement_id: id })
       @destroyed = true
     end
 
@@ -107,10 +119,10 @@ module Hubspot
     # @return [Hubspot::Engagement] self
     def patch!(params)
       data = {
-        engagement: params[:engagement]     || engagement,
+        engagement: params[:engagement] || engagement,
         associations: params[:associations] || associations,
-        attachments: params[:attachments]   || attachments,
-        metadata: params[:metadata]         || metadata
+        attachments: params[:attachments] || attachments,
+        metadata: params[:metadata] || metadata
       }
 
       Hubspot::Connection.patch_json(ENGAGEMENT_PATH, params: { engagement_id: id }, body: data)
@@ -123,10 +135,10 @@ module Hubspot
     # @return [Hubspot::Engagement] self
     def update!(params)
       data = {
-          engagement: params[:engagement]     || engagement,
-          associations: params[:associations] || associations,
-          attachments: params[:attachments]   || attachments,
-          metadata: params[:metadata]         || metadata
+        engagement: params[:engagement] || engagement,
+        associations: params[:associations] || associations,
+        attachments: params[:attachments] || attachments,
+        metadata: params[:metadata] || metadata
       }
 
       Hubspot::Connection.put_json(ENGAGEMENT_PATH, params: { engagement_id: id }, body: data)
@@ -219,7 +231,7 @@ module Hubspot
     end
 
     class << self
-      def create!(contact_id, task_title, task_body, task_timestamp = nil, owner_id = nil, status="NOT_STARTED", object_type="CONTACT")
+      def create!(contact_id, task_title, task_body, task_timestamp = nil, owner_id = nil, status = "NOT_STARTED", object_type = "CONTACT")
         data = {
           engagement: {
             type: 'TASK'
@@ -243,7 +255,7 @@ module Hubspot
       end
     end
 
-    def self.update!(task_id, contact_id, task_title, task_body, task_timestamp = nil, owner_id = nil, status="NOT_STARTED", object_type="CONTACT")
+    def self.update!(task_id, contact_id, task_title, task_body, task_timestamp = nil, owner_id = nil, status = "NOT_STARTED", object_type = "CONTACT")
       data = {
         engagement: {
           id: task_id,
